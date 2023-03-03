@@ -15,12 +15,23 @@ VVP=vvp
 VVP_POST=-fst
 VIVADO=vivado -mode batch -source
 SRCS=hdl/*.sv
+MEMS=mem/*.mem
 
 .PHONY: clean submission remove_solutions
 
 clean:
 \trm -f *.bin *.vcd *.fst vivado*.log *.jou vivado*.str *.log *.checkpoint *.bit *.html *.xml *.out
 \trm -rf .Xil
+
+program_fpga_vivado: $(SRCS) $(MAIN_MEMSMEMORIES) main.bit build.tcl program.tcl Basys-3-Master.xdc
+	@echo "########################################"
+	@echo "#### Building FPGA bitstream        ####"
+	@echo "########################################"
+	${VIVADO} build.tcl
+	@echo "########################################"
+	@echo "#### Programming FPGA (Vivado)      ####"
+	@echo "########################################"
+	${VIVADO} program.tcl
 
 """
 
@@ -56,7 +67,14 @@ for idx, sv_file in enumerate(sv_files):
     parameter_declarations = parameter_declarations.removesuffix(",")
     
     f.close()
+
+    ff = open("Makefile", "w+")
+    default_lines += f"test_{sv_files[idx][0:-3]} : testbenches/{sv_files[idx][0:-3]}_tb.sv hdl/*\n\t${{IVERILOG}} $^ -o {sv_files[idx][0:-3]}_tb.bin && ${{VVP}} {sv_files[idx][0:-3]}_tb.bin ${{VVP_POST}} && gtkwave {sv_files[idx][0:-3]}.fst -a testbenches/sy\n\n"
+    ff.writelines(default_lines)
+    ff.close()
     
+    if os.path.exists(f"testbenches/{sv_files[idx][0:-3]}_tb.sv"):
+        continue
     f = open(f"testbenches/{sv_files[idx][0:-3]}_tb.sv", "w+")
     f.write(f"""
 `timescale 1ns/1ps
@@ -87,7 +105,3 @@ module {sv_files[idx][0:-3]}_tb;
 endmodule""")
     f.close()
 
-    ff = open("Makefile", "w+")
-    default_lines += f"test_{sv_files[idx][0:-3]} : testbenches/{sv_files[idx][0:-3]}_tb.sv hdl/*\n\t${{IVERILOG}} $^ -o {sv_files[idx][0:-3]}_tb.bin && ${{VVP}} {sv_files[idx][0:-3]}_tb.bin ${{VVP_POST}} && gtkwave {sv_files[idx][0:-3]}.fst -a testbenches/sy\n\n"
-    ff.writelines(default_lines)
-    ff.close()
