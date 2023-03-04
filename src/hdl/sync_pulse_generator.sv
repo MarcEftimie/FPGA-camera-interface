@@ -16,7 +16,7 @@ module sync_pulse_generator
         output logic hsync_o, vsync_o, video_en_o,
         output logic [$clog2(ACTIVE_COLUMNS)-1:0] x_o,
         output logic [$clog2(ACTIVE_ROWS)-1:0] y_o,
-        output logic [$clog2(ACTIVE_COLUMNS*ACTIVE_ROWS)-1:0] pixel_o
+        output logic [$clog2(76800)-1:0] pixel_o
     );
 
     logic sync_pulse_clk;
@@ -27,6 +27,7 @@ module sync_pulse_generator
     );
 
     logic [9:0] row_count, column_count;
+    logic [1:0] pixel_4_count;
 
     always_ff @(posedge sync_pulse_clk) begin
         if (reset_i) begin
@@ -35,10 +36,14 @@ module sync_pulse_generator
             x_o <= 0;
             y_o <= 0;
             pixel_o <= 0;
+            pixel_4_count <= 0;
         end else begin
             if ((column_count < ACTIVE_COLUMNS) && (row_count < ACTIVE_ROWS)) begin
                 x_o <= x_o + 1;
-                pixel_o <= pixel_o + 1;
+                if (pixel_4_count == 3) begin
+                    pixel_o <= pixel_o + 1;
+                end
+                pixel_4_count <= pixel_4_count + 1;
             end
             // Iterates through columns
             if (column_count < TOTAL_COLUMNS - 1) column_count <= column_count + 1;
@@ -50,6 +55,7 @@ module sync_pulse_generator
                     // Reset row count after each frame
                     row_count <= 0;
                     pixel_o <= 0;
+                    pixel_4_count <= 0;
                     y_o <= 0;
                 end
                 // Reset column count after each row
