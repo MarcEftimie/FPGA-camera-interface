@@ -9,7 +9,7 @@ module ovo7670_top
     ) (
         input wire clk_i, reset_i,
         input wire pixel_clk_cmos_i,
-        input wire vsync_cmos_i, hsync_cmos_i,
+        input wire vsync_cmos_i, href_cmos_i,
         input wire [7:0] pixel_data_cmos_i,
         output logic reset_cmos_o,
         output logic power_mode_cmos_o,
@@ -43,10 +43,21 @@ module ovo7670_top
         .pixel_o(pixel_count)
     );
 
+    logic [7:0] pixel_data;
+
+    vram_controller VRAM_CONTROLLER (
+        .clk_i(clk_i),
+        .reset_i(reset_i),
+        .href_cmos_i(href_cmos_i),
+        .pixel_clk_cmos_i(pixel_clk_cmos_i),
+        .pixel_read_address_i(pixel_count),
+        .pixel_data_o(pixel_data)
+    );
+
     // assign vsync_o = vsync_cmos_i;
     // assign hsync_o = hsync_cmos_i;
-    assign vga_red_o = video_en ? pixel_data_cmos_i[3:0] : 4'h0;
-    assign vga_blue_o = video_en ? pixel_data_cmos_i[7:4] : 4'h0;
+    assign vga_red_o = video_en ? pixel_data[3:0] : 4'h0;
+    assign vga_blue_o = video_en ? pixel_data[7:4] : 4'h0;
     assign vga_green_o = video_en ? 4'h0 : 4'h0;
 
     // assign vga_red_o = pixel_data_cmos_i[3:0];

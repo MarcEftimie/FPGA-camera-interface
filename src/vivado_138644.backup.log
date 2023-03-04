@@ -1,0 +1,35 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Fri Mar  3 17:14:56 2023
+# Process ID: 138644
+# Current directory: /home/marc/projects/FPGA_OVO7670_Interface/src
+# Command line: vivado -mode batch -source build.tcl
+# Log file: /home/marc/projects/FPGA_OVO7670_Interface/src/vivado.log
+# Journal file: /home/marc/projects/FPGA_OVO7670_Interface/src/vivado.jou
+# Running On: marc-Precision-3551, OS: Linux, CPU Frequency: 4375.683 MHz, CPU Physical cores: 6, Host memory: 16360 MB
+#-----------------------------------------------------------
+source build.tcl
+# read_verilog [ glob ./hdl/*.sv ]
+# read_xdc ./Basys-3-Master.xdc
+# synth_design -top ovo7670_top -part xc7a35tcpg236-1
+Command: synth_design -top ovo7670_top -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 138724
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [/tools/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+ERROR: [Synth 8-36] 'href_cmos_i' is not declared [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv:21]
+ERROR: [Synth 8-36] 'href_cmos_i' is not declared [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv:52]
+INFO: [Synth 8-10285] module 'vram_controller' is ignored due to previous errors [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv:69]
+INFO: [Synth 8-9084] Verilog file '/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv' ignored due to errors
+Failed to read verilog '/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv'
+INFO: [Common 17-83] Releasing license: Synthesis
+9 Infos, 0 Warnings, 0 Critical Warnings and 3 Errors encountered.
+synth_design failed
+ERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details
+INFO: [Common 17-206] Exiting Vivado at Fri Mar  3 17:15:08 2023...

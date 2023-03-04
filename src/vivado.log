@@ -1,0 +1,59 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Fri Mar  3 17:16:42 2023
+# Process ID: 139292
+# Current directory: /home/marc/projects/FPGA_OVO7670_Interface/src
+# Command line: vivado -mode batch -source build.tcl
+# Log file: /home/marc/projects/FPGA_OVO7670_Interface/src/vivado.log
+# Journal file: /home/marc/projects/FPGA_OVO7670_Interface/src/vivado.jou
+# Running On: marc-Precision-3551, OS: Linux, CPU Frequency: 4270.839 MHz, CPU Physical cores: 6, Host memory: 16360 MB
+#-----------------------------------------------------------
+source build.tcl
+# read_verilog [ glob ./hdl/*.sv ]
+# read_xdc ./Basys-3-Master.xdc
+# synth_design -top ovo7670_top -part xc7a35tcpg236-1
+Command: synth_design -top ovo7670_top -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 139370
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [/tools/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1939.586 ; gain = 369.801 ; free physical = 6360 ; free virtual = 10071
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1514.653; parent = 1262.586; children = 252.067
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 2970.992; parent = 1942.559; children = 1028.434
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'ovo7670_top' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/ovo7670_top.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'clk_25MHz' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/clk_25MHz.sv:4]
+INFO: [Synth 8-6155] done synthesizing module 'clk_25MHz' (0#1) [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/clk_25MHz.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'sync_pulse_generator' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/sync_pulse_generator.sv:4]
+INFO: [Synth 8-6155] done synthesizing module 'sync_pulse_generator' (0#1) [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/sync_pulse_generator.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'vram_controller' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'register_file' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/register_file.sv:4]
+	Parameter ADDR_WIDTH bound to: 17 - type: integer 
+	Parameter DATA_WIDTH bound to: 12 - type: integer 
+	Parameter RAM_LENGTH bound to: 76800 - type: integer 
+	Parameter ROM_FILE bound to: zeros.mem - type: string 
+INFO: [Synth 8-3876] $readmem data file './mem/zeros.mem' is read successfully [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/register_file.sv:24]
+INFO: [Synth 8-6155] done synthesizing module 'register_file' (0#1) [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/register_file.sv:4]
+WARNING: [Synth 8-689] width (8) of port connection 'rd_data_o' does not match port width (12) of module 'register_file' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv:26]
+INFO: [Synth 8-6155] done synthesizing module 'vram_controller' (0#1) [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/vram_controller.sv:4]
+ERROR: [Synth 8-448] named port connection 'pixel_clk_cmos_i' does not exist for instance 'VRAM_CONTROLLER' of module 'vram_controller' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/ovo7670_top.sv:52]
+WARNING: [Synth 8-689] width (19) of port connection 'pixel_read_address_i' does not match port width (17) of module 'vram_controller' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/ovo7670_top.sv:53]
+ERROR: [Synth 8-6156] failed synthesizing module 'ovo7670_top' [/home/marc/projects/FPGA_OVO7670_Interface/src/hdl/ovo7670_top.sv:4]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2021.523 ; gain = 451.738 ; free physical = 6246 ; free virtual = 9957
+Synthesis current peak Physical Memory [PSS] (MB): peak = 1621.643; parent = 1369.643; children = 252.067
+Synthesis current peak Virtual Memory [VSS] (MB): peak = 3049.961; parent = 2021.527; children = 1028.434
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+INFO: [Common 17-83] Releasing license: Synthesis
+17 Infos, 2 Warnings, 0 Critical Warnings and 3 Errors encountered.
+synth_design failed
+ERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details
+INFO: [Common 17-206] Exiting Vivado at Fri Mar  3 17:16:56 2023...
