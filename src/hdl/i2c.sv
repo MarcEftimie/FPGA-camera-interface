@@ -9,7 +9,8 @@ module i2c(
     inout wire sda_io,
     output logic scl_o,
     output logic ready_o,
-    output logic done
+    output logic done_o,
+    output logic error_o
 );  
 
     // Defines
@@ -21,7 +22,8 @@ module i2c(
         ACK_BIT,
         ACK_STOP_BIT,
         STOP_BIT,
-        DONE
+        DONE,
+        DELAY
     } state_d;
 
     logic clk_200_khz;
@@ -32,8 +34,12 @@ module i2c(
     logic delay_reg, delay_next;
 
     logic ready;
+    logic done;
 
     logic sda;
+
+    logic error_reg, error_next;
+    assign error_o = error_reg;
 
     // Modules
     clk_200KHz CLK_200KHZ(.clk_i(clk_i), .clk_o(clk_200_khz));
@@ -44,15 +50,18 @@ module i2c(
             state_reg <= IDLE;
             bit_count_reg <= 7;
             delay_reg <= 0;
+            error_reg <= 0;
         end else begin
             state_reg <= state_next;
             bit_count_reg <= bit_count_next;
             delay_reg <= delay_next;
+            error_reg <= error_next;
         end
     end
 
     // Next State Logic
     always_comb begin
+        error_next = error_reg;
         ready = 0;
         sda = 1;
         bit_count_next = bit_count_reg;
@@ -76,40 +85,63 @@ module i2c(
             end
             WRITE_ADDRESS_BYTE : begin
                 sda = write_data_i[8 + bit_count_reg];
-                if (bit_count_reg == 0) begin
+                if (bit_count_reg == 0 && delay_reg) begin
                     state_next = ACK_BIT;
                 end else begin
                     if (delay_reg) begin
                         bit_count_next = bit_count_reg - 1;
                     end
-                    delay_next = ~delay_reg;
                 end
+                delay_next = ~delay_reg;
             end
             ACK_BIT : begin
                 bit_count_next = 7;
-                delay_next = 0;
-                state_next = WRITE_DATA_BYTE;
+                if (delay_reg) begin
+                    state_next = WRITE_DATA_BYTE;
+                end else begin
+                    if (sda_io != 0) begin
+                        error_next = 1;
+                    end
+                    state_next = ACK_BIT;
+                end
+                
+                delay_next = ~delay_reg;
             end
             WRITE_DATA_BYTE : begin
-                sda = write_data_i[{1'b0, bit_count_reg}];
-                if (bit_count_reg == 0) begin
+                sda = write_data_i[bit_count_reg];
+                if (bit_count_reg == 0 && delay_reg) begin
                     bit_count_next = 7;
                     state_next = ACK_STOP_BIT;
                 end else begin
-                    bit_count_next = bit_count_reg - 1;
+                    if (delay_reg) begin
+                        bit_count_next = bit_count_reg - 1;
+                    end
                 end
+                delay_next = ~delay_reg;
             end 
             ACK_STOP_BIT : begin
-                state_next = STOP_BIT;
+                if (delay_reg) begin
+                    state_next = STOP_BIT;
+                end else begin
+                    if (sda_io != 0) begin
+                        error_next = 1;
+                    end
+                    state_next = ACK_STOP_BIT;
+                end
+                delay_next = ~delay_reg;
             end
             STOP_BIT : begin
                 sda = 0;
-                state_next = DONE;
+                bit_count_next = 7;
+                state_next = DELAY;
             end
-            DONE : begin
-                done = 1;
-                sda = 0;
-                state_next = IDLE;
+            DELAY: begin
+                if (bit_count_reg == 0) begin
+                    state_next = IDLE;
+                end else begin
+                    bit_count_next = bit_count_reg - 1;
+                    state_next = DELAY;
+                end
             end
             default : begin
                 state_next = IDLE;
@@ -119,7 +151,8 @@ module i2c(
 
     // Outputs
     assign sda_io = sda ? 1'bz : 1'b0;
-    assign scl_o = ((state_reg == IDLE) | clk_100_khz) ? 1'bz : 1'b0;
+    assign scl_o = ((state_reg == IDLE || state_reg == DELAY) | clk_100_khz) ? 1'bz : 1'b0;
     assign ready_o = ready;
+    assign done_o = done;
 
 endmodule

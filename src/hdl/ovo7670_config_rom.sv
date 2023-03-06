@@ -9,7 +9,7 @@ module ovo7670_config_rom(
 
     always_ff @(posedge clk_i) begin
         case(read_address_i)
-            0:  read_data_o <= 16'hFF_F0;             // delay
+            0:  read_data_o <= 16'h00_F0;             // delay
             1:  read_data_o <= 16'h12_80;             // reset
             2:  read_data_o <= 16'h12_04;             // COM7,     set RGB color output
             // 2:  read_data_o <= 24'h43_12_00;             // COM7,     set RGB color output

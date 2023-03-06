@@ -6,7 +6,8 @@ module i2c_controller
         input wire clk_i, reset_i,
         inout wire sda_io,
         output logic scl_o,
-        output logic reset_cmos_o
+        output logic reset_cmos_o,
+        output logic error_o
     );
 
     logic clk_100_khz;
@@ -48,16 +49,17 @@ module i2c_controller
         .sda_io(sda_io),
         .scl_o(scl_o),
         .ready_o(ready),
-        .done(done)
+        .done_o(done),
+        .error_o(error_o)
     );
 
     // Registers
     always_ff @(posedge clk_100_khz, posedge reset_i) begin
         if (reset_i) begin
             state_reg <= RESET;
-            timer_reg <= 1;
+            timer_reg <= 65535;
             valid_reg <= 0;
-            read_address_reg <= 1;
+            read_address_reg <= 0;
         end else begin
             state_reg <= state_next;
             read_address_reg <= read_address_next;
@@ -79,7 +81,7 @@ module i2c_controller
                     reset_cmos_o = 1'b1;
                     state_next = RESET;
                 end else begin
-                    timer_next = 1;
+                    timer_next = 65535;
                     state_next = DELAY;
                 end
             end
@@ -94,9 +96,7 @@ module i2c_controller
             WRITE : begin
                 if (ready) begin
                     valid_next = 1'b1;
-                end
-                if (done) begin
-                    read_address_next = read_address_reg + 1;                
+                    read_address_next = read_address_reg + 1;
                 end
                 if (read_address_reg < 72) begin
                     state_next = WRITE;

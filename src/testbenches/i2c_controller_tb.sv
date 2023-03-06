@@ -10,6 +10,7 @@ module i2c_controller_tb;
     wire sda_io;
     wire scl_o;
     wire reset_cmos_o;
+    wire error_o;
 
     i2c_controller #(
     ) UUT(
@@ -25,7 +26,7 @@ module i2c_controller_tb;
         reset_i = 1;
         repeat(1) @(negedge clk_i);
         reset_i = 0;
-        repeat(100000) @(negedge clk_i);
+        repeat(2500000) @(negedge clk_i);
         $finish;
     end
 

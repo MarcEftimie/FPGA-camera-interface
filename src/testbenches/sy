@@ -1,21 +1,21 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sat Mar  4 20:50:39 2023
+[*] Sat Mar  4 21:21:07 2023
 [*]
 [dumpfile] "/home/marc/projects/FPGA_OVO7670_Interface/src/i2c_controller.fst"
-[dumpfile_mtime] "Sat Mar  4 20:50:34 2023"
-[dumpfile_size] 7145
+[dumpfile_mtime] "Sat Mar  4 21:20:57 2023"
+[dumpfile_size] 7013
 [savefile] "/home/marc/projects/FPGA_OVO7670_Interface/src/testbenches/sy"
 [timestart] 0
-[size] 2560 1376
-[pos] -1 -1
-*-25.611282 196800000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1920 1043
+[pos] 5119 -27
+*-26.611282 207495000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] i2c_controller_tb.
 [treeopen] i2c_controller_tb.UUT.
 [sst_width] 233
 [signals_width] 516
 [sst_expanded] 1
-[sst_vpaned_height] 414
+[sst_vpaned_height] 298
 @28
 i2c_controller_tb.UUT.clk_100_khz
 i2c_controller_tb.UUT.clk_i
@@ -50,9 +50,7 @@ i2c_controller_tb.UUT.I2C.delay_reg
 i2c_controller_tb.UUT.I2C.ready
 i2c_controller_tb.UUT.I2C.ready_o
 i2c_controller_tb.UUT.I2C.reset_i
-@29
 i2c_controller_tb.UUT.I2C.sda_io
-@28
 i2c_controller_tb.UUT.I2C.scl_o
 i2c_controller_tb.UUT.I2C.sda
 @22
@@ -60,7 +58,8 @@ i2c_controller_tb.UUT.I2C.state_next[4:0]
 i2c_controller_tb.UUT.I2C.state_reg[4:0]
 @28
 i2c_controller_tb.UUT.I2C.valid_i
-@22
 i2c_controller_tb.UUT.I2C.write_data_i[15:0]
+@29
+i2c_controller_tb.UUT.I2C.done
 [pattern_trace] 1
 [pattern_trace] 0
