@@ -9,7 +9,6 @@ module dual_clock_ram
     (
         input wire write_clk_i, read_clk_i,
         input wire write_en_i, read_en_i,
-        input wire write_a_i,
         input wire write_address_i, read_address_i,
         input wire write_data_i,
         output logic [WIDTH-1:0] read_data_o
@@ -19,9 +18,7 @@ module dual_clock_ram
 
     always @(posedge write_clk_i) begin
         if (write_en_i) begin
-            if (wea) begin
-                ram[addra] <= dia;
-            end
+            ram[write_address_i] <= write_data_i;
         end
     end
 

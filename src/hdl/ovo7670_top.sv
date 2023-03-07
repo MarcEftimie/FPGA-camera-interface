@@ -5,6 +5,7 @@ module ovo7670_top
     #(
         parameter ACTIVE_COLUMNS = 640,
         parameter ACTIVE_ROWS = 480,
+        parameter VRAM_DATA_WIDTH = 12,
         parameter VRAM_ADDR_WIDTH = $clog2(ACTIVE_COLUMNS*ACTIVE_ROWS)
     ) (
         input wire clk_i, reset_i,
@@ -27,16 +28,22 @@ module ovo7670_top
         .clk_o(main_clk_cmos_o)
     );
 
-    // assign reset_cmos_o = 0;
     assign power_mode_cmos_o = 0;
 
     logic video_en;
     logic [$clog2(ACTIVE_COLUMNS)-1:0] pixel_x;
     logic [$clog2(ACTIVE_ROWS)-1:0] pixel_y;
     logic [$clog2(76800)-1:0] pixel_count;
+
+    logic clk_25mhz;
+
+    clk_25MHz CLK_25MHZ (
+        .clk_i(clk_i),
+        .clk_o(clk_25mhz)
+    );
     
     sync_pulse_generator SYNC_PULSE_GENERATOR (
-        .clk_i(clk_i),
+        .clk_i(clk_25mhz),
         .reset_i(reset_i),
         .hsync_o(hsync_o),
         .vsync_o(vsync_o),
@@ -48,8 +55,11 @@ module ovo7670_top
 
     logic [11:0] pixel_data;
 
-    vram_controller VRAM_CONTROLLER (
-        .clk_i(clk_i),
+    vram_controller #(
+        .ADDR_WIDTH(VRAM_ADDR_WIDTH),
+        .DATA_WIDTH(VRAM_DATA_WIDTH)
+        ) VRAM_CONTROLLER (
+        .clk_i(clk_25mhz),
         .reset_i(reset_i),
         .pixel_clk_cmos_i(pixel_clk_cmos_i),
         .vsync_cmos_i(vsync_cmos_i),

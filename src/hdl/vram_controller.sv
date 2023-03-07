@@ -3,8 +3,8 @@
 
 module vram_controller
     #(
-        parameter ADDR_WIDTH = $clog2(76800),
-        parameter DATA_WIDTH = 12
+        parameter ADDR_WIDTH = 8,
+        parameter DATA_WIDTH = 8
     )
     (
         input wire clk_i, reset_i,

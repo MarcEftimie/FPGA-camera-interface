@@ -7,7 +7,6 @@ module i2c_controller_tb;
     parameter CLK_PERIOD_NS = 10;
     
     logic clk_i, reset_i;
-    wire sda_io;
     wire scl_o;
     wire reset_cmos_o;
     wire error_o;
@@ -26,7 +25,6 @@ module i2c_controller_tb;
         reset_i = 1;
         repeat(1) @(negedge clk_i);
         reset_i = 0;
-        repeat(2500000) @(negedge clk_i);
         $finish;
     end
 

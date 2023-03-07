@@ -12,6 +12,8 @@ module i2c_tb;
     logic valid_i;
     wire scl_o;
     wire ready_o;
+    wire done_o;
+    wire error_o;
 
     i2c #(
     ) UUT(

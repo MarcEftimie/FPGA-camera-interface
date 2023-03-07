@@ -1,17 +1,18 @@
 `timescale 1ns/1ps
 `default_nettype none
 
-module i2c(
-    input wire clk_i, reset_i,
-    input wire clk_100_khz,
-    input wire [15:0] write_data_i,
-    input wire valid_i,
-    inout wire sda_io,
-    output logic scl_o,
-    output logic ready_o,
-    output logic done_o,
-    output logic error_o
-);  
+module i2c
+    (
+        input wire clk_i, reset_i,
+        input wire clk_100_khz,
+        input wire [15:0] write_data_i,
+        input wire valid_i,
+        inout wire sda_io,
+        output logic scl_o,
+        output logic ready_o,
+        output logic done_o,
+        output logic error_o
+    );  
 
     // Defines
     typedef enum logic [4:0] {
