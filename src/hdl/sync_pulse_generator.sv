@@ -19,17 +19,10 @@ module sync_pulse_generator
         output logic [$clog2(76800)-1:0] pixel_o
     );
 
-    logic sync_pulse_clk;
-
-    clk_25MHz SYNC_PULSE_CLK(
-        .clk_i(clk_i),
-        .clk_o(sync_pulse_clk)
-    );
-
     logic [9:0] row_count, column_count;
     logic [1:0] pixel_4_count;
 
-    always_ff @(posedge sync_pulse_clk) begin
+    always_ff @(posedge clk_i) begin
         if (reset_i) begin
             row_count <= 0;
             column_count <= 0;

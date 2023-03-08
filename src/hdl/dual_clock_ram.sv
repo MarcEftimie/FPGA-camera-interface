@@ -9,8 +9,8 @@ module dual_clock_ram
     (
         input wire write_clk_i, read_clk_i,
         input wire write_en_i, read_en_i,
-        input wire write_address_i, read_address_i,
-        input wire write_data_i,
+        input wire [$clog2(DEPTH)-1:0] write_address_i, read_address_i,
+        input wire [WIDTH-1:0] write_data_i,
         output logic [WIDTH-1:0] read_data_o
     );
 

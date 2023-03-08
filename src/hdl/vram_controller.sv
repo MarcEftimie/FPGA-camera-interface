@@ -53,8 +53,8 @@ module vram_controller
     // CHECK OSCOPE, VSYNC MIGHT BE HIGH WHEN YOU EXPECT LOW SAME WITH HREF
 
     always_comb begin
-        vram_write_address_next = vram_write_en_reg;
-        vram_write_data_next = vram_write_en_reg;
+        vram_write_address_next = vram_write_address_reg;
+        vram_write_data_next = vram_write_data_reg;
         vram_write_en_next = 0;
         byte_count_next = byte_count_reg;
         if (vsync_cmos_i) begin
@@ -67,7 +67,7 @@ module vram_controller
             end else begin
                 // Write second half of byte
                 vram_write_data_next = {vram_write_address_reg[11:5], pixel_data_cmos_i[7], pixel_data_cmos_i[4:1]};
-                vram_write_address_next = vram_write_en_reg + 1;
+                vram_write_address_next = vram_write_address_reg + 1;
                 vram_write_en_next = 1;
             end
             byte_count_next = ~byte_count_reg;

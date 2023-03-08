@@ -6,7 +6,7 @@ module ovo7670_top
         parameter ACTIVE_COLUMNS = 640,
         parameter ACTIVE_ROWS = 480,
         parameter VRAM_DATA_WIDTH = 12,
-        parameter VRAM_ADDR_WIDTH = $clog2(ACTIVE_COLUMNS*ACTIVE_ROWS)
+        parameter VRAM_ADDR_WIDTH = $clog2(ACTIVE_COLUMNS*ACTIVE_ROWS/4)
     ) (
         input wire clk_i, reset_i,
         input wire pixel_clk_cmos_i,
