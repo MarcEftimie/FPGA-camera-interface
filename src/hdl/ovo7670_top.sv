@@ -12,8 +12,8 @@ module ovo7670_top
         input wire pixel_clk_cmos_i,
         input wire vsync_cmos_i, href_cmos_i,
         input wire [7:0] pixel_data_cmos_i,
-        inout wire sda_io,
-        output logic scl_o,
+        inout tri sda_io,
+        output tri scl_o,
         output logic reset_cmos_o,
         output logic power_mode_cmos_o,
         output logic main_clk_cmos_o,
@@ -79,7 +79,9 @@ module ovo7670_top
     // assign vga_blue_o = pixel_data_cmos_i[3:0];
     // assign vga_green_o = pixel_data_cmos_i[3:0];
 
-    i2c_controller I2C_CONTROLLER (
+    i2c_controller #(
+        // .RESET_DELAY(1)
+        ) I2C_CONTROLLER (
         .clk_i(clk_i),
         .reset_i(reset_i),
         .sda_io(sda_io),

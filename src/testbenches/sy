@@ -1,17 +1,16 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Wed Mar  8 00:10:22 2023
+[*] Sat Mar 11 01:58:41 2023
 [*]
 [dumpfile] "/home/marc/projects/FPGA_Camera_Interface/src/i2c_controller.fst"
-[dumpfile_mtime] "Wed Mar  8 00:10:05 2023"
-[dumpfile_size] 3274
+[dumpfile_mtime] "Sat Mar 11 01:58:33 2023"
+[dumpfile_size] 7121
 [savefile] "/home/marc/projects/FPGA_Camera_Interface/src/testbenches/sy"
 [timestart] 0
 [size] 1920 1016
 [pos] -1 -1
-*-25.000000 81300000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-28.000000 81300000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] i2c_controller_tb.
-[treeopen] i2c_controller_tb.UUT.
 [sst_width] 233
 [signals_width] 254
 [sst_expanded] 1
@@ -39,31 +38,5 @@ i2c_controller_tb.UUT.timer_reg[15:0]
 @28
 i2c_controller_tb.UUT.valid_next
 i2c_controller_tb.UUT.valid_reg
-@29
-i2c_controller_tb.UUT.I2C.bit_count_next[2:0]
-i2c_controller_tb.UUT.I2C.bit_count_reg[2:0]
-i2c_controller_tb.UUT.I2C.clk_100_khz
-i2c_controller_tb.UUT.I2C.clk_200_khz
-i2c_controller_tb.UUT.I2C.clk_i
-i2c_controller_tb.UUT.I2C.delay_next
-i2c_controller_tb.UUT.I2C.delay_reg
-i2c_controller_tb.UUT.I2C.done
-i2c_controller_tb.UUT.I2C.done_o
-i2c_controller_tb.UUT.I2C.error_next
-i2c_controller_tb.UUT.I2C.error_o
-i2c_controller_tb.UUT.I2C.error_reg
-i2c_controller_tb.UUT.I2C.ready
-i2c_controller_tb.UUT.I2C.ready_o
-i2c_controller_tb.UUT.I2C.reset_i
-i2c_controller_tb.UUT.I2C.scl_o
-i2c_controller_tb.UUT.I2C.sda
-i2c_controller_tb.UUT.I2C.sda_io
-@23
-i2c_controller_tb.UUT.I2C.state_next[4:0]
-i2c_controller_tb.UUT.I2C.state_reg[4:0]
-@29
-i2c_controller_tb.UUT.I2C.valid_i
-@23
-i2c_controller_tb.UUT.I2C.write_data_i[15:0]
 [pattern_trace] 1
 [pattern_trace] 0

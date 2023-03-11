@@ -13,6 +13,7 @@ module i2c_controller_tb;
     wire error_o;
 
     i2c_controller #(
+        .RESET_DELAY(1)
     ) UUT(
         .*
     );
@@ -26,7 +27,7 @@ module i2c_controller_tb;
         reset_i = 1;
         repeat(1) @(negedge clk_i);
         reset_i = 0;
-        repeat(100000) @(negedge clk_i);
+        repeat(1000000) @(negedge clk_i);
         $finish;
     end
 

@@ -19,8 +19,10 @@ module i2c
         IDLE,
         START_BIT,
         WRITE_ADDRESS_BYTE,
+        WRITE_REG_ADDRESS_BYTE,
         WRITE_DATA_BYTE,
-        ACK_BIT,
+        ACK1_BIT,
+        ACK2_BIT,
         ACK_STOP_BIT,
         STOP_BIT,
         DONE,
@@ -40,10 +42,13 @@ module i2c
     logic sda;
 
     logic error_reg, error_next;
+
+    logic [7:0] address_byte;
+    assign address_byte = 8'h42; 
     assign error_o = error_reg;
 
     // Modules
-    clk_200KHz CLK_200KHZ(.clk_i(clk_i), .clk_o(clk_200_khz));
+    clk_100KHz CLK_100KHZ(.clk_i(clk_i), .clk_o(clk_200_khz));
 
     // Registers
     always_ff @(posedge clk_200_khz, posedge reset_i) begin
@@ -85,17 +90,43 @@ module i2c
                 state_next = WRITE_ADDRESS_BYTE;
             end
             WRITE_ADDRESS_BYTE : begin
-                sda = write_data_i[8 + bit_count_reg];
+                sda = address_byte[bit_count_reg];
                 if (bit_count_reg == 0 && delay_reg) begin
-                    state_next = ACK_BIT;
+                    state_next = ACK1_BIT;
                 end else begin
                     if (delay_reg) begin
                         bit_count_next = bit_count_reg - 1;
                     end
+                    state_next = WRITE_ADDRESS_BYTE;
                 end
                 delay_next = ~delay_reg;
             end
-            ACK_BIT : begin
+            ACK1_BIT : begin
+                bit_count_next = 7;
+                if (delay_reg) begin
+                    state_next = WRITE_REG_ADDRESS_BYTE;
+                end else begin
+                    if (sda_io != 0) begin
+                        error_next = 1;
+                    end
+                    state_next = ACK1_BIT;
+                end
+                
+                delay_next = ~delay_reg;
+            end
+            WRITE_REG_ADDRESS_BYTE : begin
+                sda = write_data_i[8 + bit_count_reg];
+                if (bit_count_reg == 0 && delay_reg) begin
+                    state_next = ACK2_BIT;
+                end else begin
+                    if (delay_reg) begin
+                        bit_count_next = bit_count_reg - 1;
+                    end
+                    state_next = WRITE_REG_ADDRESS_BYTE;
+                end
+                delay_next = ~delay_reg;
+            end
+            ACK2_BIT : begin
                 bit_count_next = 7;
                 if (delay_reg) begin
                     state_next = WRITE_DATA_BYTE;
@@ -103,13 +134,13 @@ module i2c
                     if (sda_io != 0) begin
                         error_next = 1;
                     end
-                    state_next = ACK_BIT;
+                    state_next = ACK2_BIT;
                 end
                 
                 delay_next = ~delay_reg;
             end
             WRITE_DATA_BYTE : begin
-                sda = write_data_i[bit_count_reg];
+                sda = write_data_i[{1'b0, bit_count_reg}];
                 if (bit_count_reg == 0 && delay_reg) begin
                     bit_count_next = 7;
                     state_next = ACK_STOP_BIT;
@@ -117,6 +148,7 @@ module i2c
                     if (delay_reg) begin
                         bit_count_next = bit_count_reg - 1;
                     end
+                    state_next = WRITE_DATA_BYTE;
                 end
                 delay_next = ~delay_reg;
             end 
@@ -152,7 +184,7 @@ module i2c
 
     // Outputs
     assign sda_io = sda ? 1'bz : 1'b0;
-    assign scl_o = ((state_reg == IDLE || state_reg == DELAY) | clk_100_khz) ? 1'bz : 1'b0;
+    assign scl_o = ((state_reg == IDLE || state_reg == DELAY) || clk_100_khz) ? 1'bz : 1'b0;
     assign ready_o = ready;
     assign done_o = done;
 

@@ -1,18 +1,21 @@
 `timescale 1ns/1ps
 `default_nettype none
 
-module i2c_controller 
+module i2c_controller
+    #(
+        parameter RESET_DELAY = 65535
+    )
     (
         input wire clk_i, reset_i,
-        inout wire sda_io,
-        output logic scl_o,
+        inout tri sda_io,
+        output tri scl_o,
         output logic reset_cmos_o,
         output logic error_o
     );
 
     logic clk_100_khz;
 
-    clk_100KHz CLK_100KHZ(.clk_i(clk_i), .clk_o(clk_100_khz));
+    clk_50KHz CLK_50KHZ(.clk_i(clk_i), .clk_o(clk_100_khz));
 
     typedef enum logic [2:0] {
         IDLE,
@@ -57,7 +60,7 @@ module i2c_controller
     always_ff @(posedge clk_100_khz, posedge reset_i) begin
         if (reset_i) begin
             state_reg <= RESET;
-            timer_reg <= 65535;
+            timer_reg <= RESET_DELAY;
             valid_reg <= 0;
             read_address_reg <= 0;
         end else begin
@@ -81,7 +84,7 @@ module i2c_controller
                     reset_cmos_o = 1'b1;
                     state_next = RESET;
                 end else begin
-                    timer_next = 65535;
+                    timer_next = RESET_DELAY;
                     state_next = DELAY;
                 end
             end

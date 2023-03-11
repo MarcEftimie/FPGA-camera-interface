@@ -5,18 +5,20 @@
 module ovo7670_top_tb;
 
     parameter CLK_PERIOD_NS = 10;
+    parameter CLK2_PERIOD_NS = 42;
     
     parameter ACTIVE_COLUMNS = 640;
     parameter ACTIVE_ROWS = 480;
     parameter VRAM_DATA_WIDTH = 12;
     parameter VRAM_ADDR_WIDTH = $clog2(ACTIVE_COLUMNS*ACTIVE_ROWS);
     logic clk_i, reset_i;
-    logic xel_clk_cmos_i;
+    logic pixel_clk_cmos_i;
     logic vsync_cmos_i, href_cmos_i;
     logic [7:0] pixel_data_cmos_i;
+    wire sda_io;
     wire scl_o;
     wire reset_cmos_o;
-    wire wer_mode_cmos_o;
+    wire power_mode_cmos_o;
     wire main_clk_cmos_o;
     wire vsync_o;
     wire hsync_o;
@@ -33,14 +35,18 @@ module ovo7670_top_tb;
     );
 
     always #(CLK_PERIOD_NS/2) clk_i = ~clk_i;
+    always #(CLK2_PERIOD_NS/2) pixel_clk_cmos_i = ~pixel_clk_cmos_i;
+
 
     initial begin
         $dumpfile("ovo7670_top.fst");
         $dumpvars(0, UUT);
         clk_i = 0;
+        pixel_clk_cmos_i = 0;
         reset_i = 1;
         repeat(1) @(negedge clk_i);
         reset_i = 0;
+        repeat(100000) @(negedge clk_i);
         $finish;
     end
 
