@@ -28,7 +28,7 @@ module sync_pulse_generator
             column_count <= 0;
             x_o <= 0;
             y_o <= 0;
-            pixel_o <= 0;
+            pixel_o <= 1;
             pixel_4_count <= 0;
         end else begin
             if ((column_count < ACTIVE_COLUMNS) && (row_count < ACTIVE_ROWS)) begin

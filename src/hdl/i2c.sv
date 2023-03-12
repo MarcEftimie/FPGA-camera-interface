@@ -7,7 +7,7 @@ module i2c
         input wire clk_100_khz,
         input wire [15:0] write_data_i,
         input wire valid_i,
-        inout wire sda_io,
+        inout tri sda_io,
         output logic scl_o,
         output logic ready_o,
         output logic done_o,
@@ -103,6 +103,7 @@ module i2c
             end
             ACK1_BIT : begin
                 bit_count_next = 7;
+                sda = 0;
                 if (delay_reg) begin
                     state_next = WRITE_REG_ADDRESS_BYTE;
                 end else begin
@@ -128,6 +129,7 @@ module i2c
             end
             ACK2_BIT : begin
                 bit_count_next = 7;
+                sda = 0;
                 if (delay_reg) begin
                     state_next = WRITE_DATA_BYTE;
                 end else begin
@@ -153,6 +155,7 @@ module i2c
                 delay_next = ~delay_reg;
             end 
             ACK_STOP_BIT : begin
+                sda = 0;
                 if (delay_reg) begin
                     state_next = STOP_BIT;
                 end else begin
@@ -183,8 +186,9 @@ module i2c
     end
 
     // Outputs
-    assign sda_io = sda ? 1'bz : 1'b0;
-    assign scl_o = ((state_reg == IDLE || state_reg == DELAY) || clk_100_khz) ? 1'bz : 1'b0;
+    assign sda_io = sda;
+    assign scl_o = clk_100_khz;
+    // assign scl_o = ((state_reg == IDLE || state_reg == DELAY) || clk_100_khz);
     assign ready_o = ready;
     assign done_o = done;
 

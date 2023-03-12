@@ -1,42 +1,40 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sat Mar 11 01:58:41 2023
+[*] Sun Mar 12 19:21:40 2023
 [*]
-[dumpfile] "/home/marc/projects/FPGA_Camera_Interface/src/i2c_controller.fst"
-[dumpfile_mtime] "Sat Mar 11 01:58:33 2023"
-[dumpfile_size] 7121
+[dumpfile] "/home/marc/projects/FPGA_Camera_Interface/src/vram_controller.fst"
+[dumpfile_mtime] "Sun Mar 12 19:21:36 2023"
+[dumpfile_size] 924
 [savefile] "/home/marc/projects/FPGA_Camera_Interface/src/testbenches/sy"
 [timestart] 0
 [size] 1920 1016
 [pos] -1 -1
 *-28.000000 81300000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-[treeopen] i2c_controller_tb.
+[treeopen] vram_controller_tb.
 [sst_width] 233
 [signals_width] 254
 [sst_expanded] 1
 [sst_vpaned_height] 289
 @28
-i2c_controller_tb.UUT.clk_100_khz
-i2c_controller_tb.UUT.clk_i
-i2c_controller_tb.UUT.done
-i2c_controller_tb.UUT.error_o
+vram_controller_tb.UUT.byte_count_next
+vram_controller_tb.UUT.byte_count_reg
+vram_controller_tb.UUT.clk_i
+vram_controller_tb.UUT.href_cmos_i
+vram_controller_tb.UUT.pixel_clk_cmos_i
 @22
-i2c_controller_tb.UUT.i2c_write_data[15:0]
-i2c_controller_tb.UUT.read_address_next[7:0]
-i2c_controller_tb.UUT.read_address_reg[7:0]
+vram_controller_tb.UUT.pixel_data_cmos_i[7:0]
+vram_controller_tb.UUT.pixel_data_o[7:0]
+vram_controller_tb.UUT.pixel_read_address_i[7:0]
 @28
-i2c_controller_tb.UUT.ready
-i2c_controller_tb.UUT.reset_cmos_o
-i2c_controller_tb.UUT.reset_i
-i2c_controller_tb.UUT.scl_o
-i2c_controller_tb.UUT.sda_io
-i2c_controller_tb.UUT.state_next[2:0]
-i2c_controller_tb.UUT.state_reg[2:0]
+vram_controller_tb.UUT.reset_i
 @22
-i2c_controller_tb.UUT.timer_next[15:0]
-i2c_controller_tb.UUT.timer_reg[15:0]
+vram_controller_tb.UUT.vram_write_address_next[7:0]
+vram_controller_tb.UUT.vram_write_address_reg[7:0]
+vram_controller_tb.UUT.vram_write_data_next[7:0]
+vram_controller_tb.UUT.vram_write_data_reg[7:0]
 @28
-i2c_controller_tb.UUT.valid_next
-i2c_controller_tb.UUT.valid_reg
+vram_controller_tb.UUT.vram_write_en_next
+vram_controller_tb.UUT.vram_write_en_reg
+vram_controller_tb.UUT.vsync_cmos_i
 [pattern_trace] 1
 [pattern_trace] 0
