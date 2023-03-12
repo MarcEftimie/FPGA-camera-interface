@@ -3,8 +3,8 @@
 
 module vram_controller
     #(
-        parameter ADDR_WIDTH = 8,
-        parameter DATA_WIDTH = 8
+        parameter ADDR_WIDTH = $clog2((640*480)/4),
+        parameter DATA_WIDTH = 12
     )
     (
         input wire clk_i, reset_i,
@@ -50,8 +50,6 @@ module vram_controller
         end
     end
 
-    // CHECK OSCOPE, VSYNC MIGHT BE HIGH WHEN YOU EXPECT LOW SAME WITH HREF
-
     always_comb begin
         vram_write_address_next = vram_write_address_reg;
         vram_write_data_next = vram_write_data_reg;
@@ -73,31 +71,6 @@ module vram_controller
             byte_count_next = ~byte_count_reg;
         end
     end
-    // always_comb begin
-    //     byte_count_next = byte_count_reg;
-    //     vram_write_data_next = vram_write_data_reg;
-    //     if (vsync_cmos_i) begin
-    //         vram_write_address_next = 0;
-    //     end else if (href_cmos_i) begin
-    //         if (~byte_count_reg) begin
-    //             vram_write_data_next[11:5] = {pixel_data_cmos_i[7:4], pixel_data_cmos_i[2:0]};
-    //         end else begin
-    //             vram_write_data_next[4:0] = {pixel_data_cmos_i[7], pixel_data_cmos_i[4:1]};
-    //         end
-    //         if (vram_write_address_reg < 76800) begin
-    //             if (byte_count_reg) begin
-    //                 vram_write_address_next = vram_write_address_reg + 1;
-    //             end
-    //         end else begin
-    //             vram_write_address_next = 0;
-    //         end
-    //         byte_count_next = ~byte_count_reg;
-    //     end else begin
-    //         vram_write_address_next = vram_write_address_reg;
-    //         vram_write_data_next = vram_write_data_reg;
-    //         byte_count_next = 0;
-    //     end
-    // end
 
 
 endmodule
