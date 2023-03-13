@@ -43,14 +43,22 @@ module i2c_controller
         .read_data_o(i2c_write_data)
     );
 
+    assign sda_io = (state_reg == DELAY || state_next == DONE) ? 1'b1 : 
+                    (state_reg == RESET) ? 1'b0 : sda_i2c;
+    assign scl_o =  (state_next == DONE) ? 1'b1 : (delay_state == WRITE) ? scl_i2c : 1'b0;
+
+    tri sda_i2c;
+    logic scl_i2c;
+    state_t delay_state;
+
     i2c I2C(
         .clk_i(clk_i),
         .reset_i(reset_i),
         .clk_100_khz(clk_100_khz),
         .write_data_i(i2c_write_data),
         .valid_i(valid_reg),
-        .sda_io(sda_io),
-        .scl_o(scl_o),
+        .sda_io(sda_i2c),
+        .scl_o(scl_i2c),
         .ready_o(ready),
         .done_o(done),
         .error_o(error_o)
@@ -60,14 +68,16 @@ module i2c_controller
     always_ff @(posedge clk_100_khz, posedge reset_i) begin
         if (reset_i) begin
             state_reg <= RESET;
+            delay_state <= RESET;
             timer_reg <= RESET_DELAY;
             valid_reg <= 0;
-            read_address_reg <= 0;
+            read_address_reg <= 255;
         end else begin
             state_reg <= state_next;
             read_address_reg <= read_address_next;
             valid_reg <= valid_next;
             timer_reg <= timer_next;
+            delay_state <= state_reg;
         end
     end
 
@@ -76,12 +86,12 @@ module i2c_controller
         state_next = RESET;
         read_address_next = read_address_reg;
         valid_next = 1'b0;
-        reset_cmos_o = 1'bz;
+        reset_cmos_o = 1'b1;
         case (state_reg)
             RESET : begin
                 if (timer_reg > 0) begin
                     timer_next = timer_reg - 1;
-                    reset_cmos_o = 1'b1;
+                    reset_cmos_o = 1'b0;
                     state_next = RESET;
                 end else begin
                     timer_next = RESET_DELAY;
@@ -95,16 +105,17 @@ module i2c_controller
                 end else begin
                     state_next = WRITE;
                 end
+                reset_cmos_o = 1'b0;
             end
             WRITE : begin
                 if (ready) begin
                     valid_next = 1'b1;
                     read_address_next = read_address_reg + 1;
                 end
-                if (read_address_reg < 72) begin
-                    state_next = WRITE;
-                end else begin
+                if (read_address_reg == 78) begin
                     state_next = DONE;
+                end else begin
+                    state_next = WRITE;
                 end
             end
             DONE : begin

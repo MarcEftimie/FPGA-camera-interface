@@ -187,8 +187,8 @@ module i2c
 
     // Outputs
     assign sda_io = sda;
-    assign scl_o = clk_100_khz;
-    // assign scl_o = ((state_reg == IDLE || state_reg == DELAY) || clk_100_khz);
+    // assign scl_o = clk_100_khz;
+    assign scl_o = ((state_reg == IDLE || state_reg == DELAY) || clk_100_khz);
     assign ready_o = ready;
     assign done_o = done;
 
